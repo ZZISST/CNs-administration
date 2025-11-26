@@ -1,0 +1,20 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push # адрес Loki, куда будут слаться логи
+
+scrape_configs:
+  - job_name: system # любое имя
+    pipeline_stages:
+      - docker: {}
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nextcloud_logs # любое имя, по этому полю будет осуществляться индексирование
+          __path__: /opt/nc_data/*.log # путь к лог файлам
